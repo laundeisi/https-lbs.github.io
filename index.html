@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensor Selection Guide: How to Choose the Right Sensor</title>
+    <meta name="description" content="Learn how to choose the right sensor for your project. Compare temperature, distance and IMU sensors by accuracy, interface, range and cost.">
+    <link rel="canonical" href="https://YOURUSERNAME.github.io/">
+
+    <meta property="og:title" content="Sensor Selection Guide: How to Choose the Right Sensor">
+    <meta property="og:description" content="Learn how to choose the right sensor for your project. Compare temperature, distance and IMU sensors by accuracy, interface, range and cost.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://YOURUSERNAME.github.io/">
+
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "Sensor Selection Guide",
+            "url": "https://YOURUSERNAME.github.io/",
+            "description": "A practical knowledge base for choosing sensors in embedded and hardware projects."
+        }
+    </script>
+
+    <style>
+        :root {
+          --ink: #16202b;
+          --ink-soft: #4a5a6a;
+          --line: #dde4ea;
+          --bg: #ffffff;
+          --bg-alt: #f5f8fa;
+          --accent: #0d6b6b;
+          --accent-soft: #e6f2f2;
+          --radius: 10px;
+          --maxw: 1040px;
+        }
+
+        * { box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+          margin: 0;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+          font-size: 17px;
+          line-height: 1.65;
+          color: var(--ink);
+          background: var(--bg);
+          -webkit-font-smoothing: antialiased;
+        }
+
+        .wrap {
+          max-width: var(--maxw);
+          margin: 0 auto;
+          padding: 0 24px;
+        }
+
+        /* ---------- Header ---------- */
+        .site-header {
+          border-bottom: 1px solid var(--line);
+          position: sticky;
+          top: 0;
+          background: rgba(255,255,255,0.94);
+          backdrop-filter: blur(8px);
+          z-index: 10;
+        }
+
+        .site-header .wrap {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 24px;
+          min-height: 68px;
+          flex-wrap: wrap;
+        }
+
+        .brand {
+          font-weight: 700;
+          font-size: 1.02rem;
+          letter-spacing: -0.01em;
+          color: var(--ink);
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .brand-mark {
+          width: 26px;
+          height: 26px;
+          border-radius: 6px;
+          background: var(--accent);
+          display: grid;
+          place-items: center;
+          flex: none;
+        }
+
+        .brand-mark svg { display: block; }
+
+        .site-nav ul {
+          display: flex;
+          gap: 26px;
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          flex-wrap: wrap;
+        }
+
+        .site-nav a {
+          color: var(--ink-soft);
+          text-decoration: none;
+          font-size: 0.92rem;
+          font-weight: 500;
+          padding: 4px 0;
+          border-bottom: 2px solid transparent;
+        }
+
+        .site-nav a:hover,
+        .site-nav a:focus-visible {
+          color: var(--accent);
+          border-bottom-color: var(--accent);
+        }
+
+        /* ---------- Hero ---------- */
+        .hero {
+          background: var(--bg-alt);
+          border-bottom: 1px solid var(--line);
+          padding: 72px 0 64px;
+        }
+
+        .eyebrow {
+          display: inline-block;
+          font-size: 0.74rem;
+          font-weight: 700;
+          letter-spacing: 0.11em;
+          text-transform: uppercase;
+          color: var(--accent);
+          background: var(--accent-soft);
+          padding: 5px 11px;
+          border-radius: 999px;
+          margin-bottom: 22px;
+        }
+
+        h1 {
+          font-size: clamp(1.95rem, 4.4vw, 2.85rem);
+          line-height: 1.18;
+          letter-spacing: -0.022em;
+          margin: 0 0 20px;
+          max-width: 20ch;
+        }
+
+        .lede {
+          font-size: 1.1rem;
+          color: var(--ink-soft);
+          max-width: 62ch;
+          margin: 0 0 30px;
+        }
+
+        .hero-actions {
+          display: flex;
+          gap: 14px;
+          flex-wrap: wrap;
+        }
+
+        .btn {
+          display: inline-block;
+          padding: 12px 22px;
+          border-radius: var(--radius);
+          font-weight: 600;
+          font-size: 0.94rem;
+          text-decoration: none;
+          transition: background 0.15s ease, color 0.15s ease;
+        }
+
+        .btn-primary {
+          background: var(--accent);
+          color: #fff;
+        }
+
+        .btn-primary:hover { background: #0a5555; }
+
+        .btn-ghost {
+          background: transparent;
+          color: var(--ink);
+          border: 1px solid var(--line);
+        }
+
+        .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* ---------- Sections ---------- */
+        section { padding: 64px 0; }
+
+        section + section { border-top: 1px solid var(--line); }
+
+        h2 {
+          font-size: clamp(1.4rem, 2.6vw, 1.72rem);
+          letter-spacing: -0.017em;
+          line-height: 1.25;
+          margin: 0 0 14px;
+        }
+
+        .section-intro {
+          color: var(--ink-soft);
+          max-width: 62ch;
+          margin: 0 0 38px;
+        }
+
+        /* ---------- Category cards ---------- */
+        .cards {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(266px, 1fr));
+          gap: 22px;
+        }
+
+        .card {
+          border: 1px solid var(--line);
+          border-radius: var(--radius);
+          padding: 26px 24px 24px;
+          background: var(--bg);
+          display: flex;
+          flex-direction: column;
+          transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .card:hover {
+          border-color: #b9cdd6;
+          box-shadow: 0 6px 20px rgba(22,32,43,0.06);
+        }
+
+        .card-icon {
+          width: 42px;
+          height: 42px;
+          border-radius: 9px;
+          background: var(--accent-soft);
+          display: grid;
+          place-items: center;
+          margin-bottom: 18px;
+          flex: none;
+        }
+
+        .card h3 {
+          font-size: 1.06rem;
+          margin: 0 0 10px;
+          letter-spacing: -0.012em;
+        }
+
+        .card p {
+          color: var(--ink-soft);
+          font-size: 0.94rem;
+          margin: 0 0 18px;
+          flex: 1;
+        }
+
+        .card-link {
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: var(--accent);
+          text-decoration: none;
+        }
+
+        .card-link:hover { text-decoration: underline; }
+
+        /* ---------- Table ---------- */
+        .table-scroll {
+          overflow-x: auto;
+          border: 1px solid var(--line);
+          border-radius: var(--radius);
+        }
+
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 0.93rem;
+          min-width: 620px;
+        }
+
+        caption {
+          text-align: left;
+          padding: 16px 20px;
+          font-size: 0.84rem;
+          color: var(--ink-soft);
+          background: var(--bg-alt);
+          border-bottom: 1px solid var(--line);
+          font-weight: 500;
+        }
+
+        thead th {
+          text-align: left;
+          background: var(--bg-alt);
+          font-size: 0.78rem;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          color: var(--ink-soft);
+          padding: 13px 20px;
+          border-bottom: 1px solid var(--line);
+          font-weight: 700;
+        }
+
+        tbody th {
+          text-align: left;
+          font-weight: 600;
+          padding: 14px 20px;
+          border-bottom: 1px solid var(--line);
+          color: var(--ink);
+          width: 30%;
+        }
+
+        tbody td {
+          padding: 14px 20px;
+          border-bottom: 1px solid var(--line);
+          color: var(--ink-soft);
+        }
+
+        tbody tr:last-child th,
+        tbody tr:last-child td { border-bottom: none; }
+
+        /* ---------- FAQ ---------- */
+        .faq-item {
+          border-bottom: 1px solid var(--line);
+          padding: 22px 0;
+        }
+
+        .faq-item:first-of-type { border-top: 1px solid var(--line); }
+
+        .faq-item h3 {
+          font-size: 1.02rem;
+          margin: 0 0 8px;
+          letter-spacing: -0.01em;
+        }
+
+        .faq-item p {
+          margin: 0;
+          color: var(--ink-soft);
+          font-size: 0.96rem;
+          max-width: 78ch;
+        }
+
+        /* ---------- Footer ---------- */
+        .site-footer {
+          background: var(--bg-alt);
+          border-top: 1px solid var(--line);
+          padding: 40px 0;
+          font-size: 0.88rem;
+          color: var(--ink-soft);
+        }
+
+        .site-footer .wrap {
+          display: flex;
+          justify-content: space-between;
+          gap: 20px;
+          flex-wrap: wrap;
+        }
+
+        .site-footer p { margin: 0; }
+
+        .site-footer a { color: var(--accent); text-decoration: none; }
+        .site-footer a:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) {
+          body { font-size: 16px; }
+          .hero { padding: 52px 0 46px; }
+          section { padding: 48px 0; }
+          .site-header .wrap { min-height: 60px; padding-top: 12px; padding-bottom: 12px; }
+          .site-nav ul { gap: 18px; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="wrap">
+        <a class="brand" href="#top">
+        <span class="brand-mark" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round">
+            <path d="M4 18 L10 9 L15 14 L20 5"/>
+          </svg>
+        </span>
+            Sensor Selection Guide
+        </a>
+        <nav class="site-nav" aria-label="Main navigation">
+            <ul>
+                <li><a href="#categories">Categories</a></li>
+                <li><a href="#criteria">Selection Criteria</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main id="top">
+
+    <div class="hero">
+        <div class="wrap">
+            <span class="eyebrow">Selection Knowledge Base</span>
+            <h1>How to Choose the Right Sensor for Your Project</h1>
+            <p class="lede">
+                Sensor selection is a trade-off exercise. A part that is accurate enough for a
+                laboratory instrument may be too slow for a motor controller, and a sensor with
+                excellent resolution may be unusable if its interface does not match your
+                microcontroller. This site compares sensor technologies by the specifications
+                that actually change a design decision.
+            </p>
+            <div class="hero-actions">
+                <a class="btn btn-primary" href="#categories">Browse Categories</a>
+                <a class="btn btn-ghost" href="#criteria">See Selection Criteria</a>
+            </div>
+        </div>
+    </div>
+
+    <section id="categories">
+        <div class="wrap">
+            <h2>Browse by sensor category</h2>
+            <p class="section-intro">
+                Each category page compares the technologies that dominate that measurement type,
+                using the same set of criteria: accuracy, range, interface, response time and cost.
+            </p>
+
+            <div class="cards">
+
+                <article class="card">
+            <span class="card-icon" aria-hidden="true">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#0d6b6b" stroke-width="2" stroke-linecap="round">
+                <path d="M12 21a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v12a3 3 0 0 0 3 3z"/>
+                <path d="M12 9v9"/>
+              </svg>
+            </span>
+                    <h3>Temperature Sensors</h3>
+                    <p>
+                        Thermocouples, RTDs, thermistors and digital sensors compared by range,
+                        accuracy and response time.
+                    </p>
+                    <a class="card-link" href="#criteria">Compare criteria &rarr;</a>
+                </article>
+
+                <article class="card">
+            <span class="card-icon" aria-hidden="true">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#0d6b6b" stroke-width="2" stroke-linecap="round">
+                <path d="M3 12h3"/>
+                <path d="M18 12h3"/>
+                <path d="M7.5 8.5a5 5 0 0 1 0 7"/>
+                <path d="M16.5 8.5a5 5 0 0 0 0 7"/>
+                <circle cx="12" cy="12" r="1.6"/>
+              </svg>
+            </span>
+                    <h3>Distance &amp; Ranging Sensors</h3>
+                    <p>
+                        Ultrasonic, infrared and laser modules compared by range, beam angle,
+                        update rate and cost.
+                    </p>
+                    <a class="card-link" href="#criteria">Compare criteria &rarr;</a>
+                </article>
+
+                <article class="card">
+            <span class="card-icon" aria-hidden="true">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#0d6b6b" stroke-width="2" stroke-linecap="round">
+                <circle cx="12" cy="12" r="8"/>
+                <path d="M12 4v4"/>
+                <path d="M12 16v4"/>
+                <path d="M4 12h4"/>
+                <path d="M16 12h4"/>
+              </svg>
+            </span>
+                    <h3>Inertial Measurement Units</h3>
+                    <p>
+                        IMUs compared by gyroscope drift, noise density, interface options and
+                        fusion support.
+                    </p>
+                    <a class="card-link" href="#criteria">Compare criteria &rarr;</a>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="criteria">
+        <div class="wrap">
+            <h2>Selection criteria that change a decision</h2>
+            <p class="section-intro">
+                Most selection mistakes come from comparing headline numbers instead of asking
+                which specification actually constrains the design. The table below shows how the
+                same criterion means different things across sensor types.
+            </p>
+
+            <div class="table-scroll">
+                <table>
+                    <caption>How key specifications differ across sensor categories</caption>
+                    <thead>
+                    <tr>
+                        <th scope="col">Criterion</th>
+                        <th scope="col">Temperature</th>
+                        <th scope="col">Distance</th>
+                        <th scope="col">IMU</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">Accuracy</th>
+                        <td>Deviation from true temperature, often specified per class</td>
+                        <td>Absolute error in millimetres or percent of reading</td>
+                        <td>Bias stability and drift over time and temperature</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Range</th>
+                        <td>Minimum and maximum measurable temperature</td>
+                        <td>Minimum and maximum measurable distance</td>
+                        <td>Full-scale acceleration and angular rate</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Interface</th>
+                        <td>Analog voltage, resistance, OneWire, I2C</td>
+                        <td>Digital trigger/echo, I2C, UART, analog</td>
+                        <td>I2C or SPI, with or without FIFO</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Response time</th>
+                        <td>Thermal mass and package-dependent settling</td>
+                        <td>Update rate limited by time-of-flight or sampling</td>
+                        <td>Output data rate and filter bandwidth</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Cost driver</th>
+                        <td>Precision class and calibration effort</td>
+                        <td>Range and beam quality</td>
+                        <td>Number of axes and fusion capability</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq">
+        <div class="wrap">
+            <h2>Frequently asked questions</h2>
+
+            <div class="faq-item">
+                <h3>Is a more expensive sensor always more accurate?</h3>
+                <p>
+                    No. Price often reflects packaging, calibration effort or interface complexity
+                    rather than measurement accuracy alone. A lower-cost digital sensor with an
+                    integrated ADC can outperform an analog sensor whose signal conditioning is
+                    poorly designed.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What is the difference between accuracy and resolution?</h3>
+                <p>
+                    Resolution is the smallest change a sensor can report; accuracy is how close
+                    that report is to the true value. A sensor can have high resolution and poor
+                    accuracy, which is why both specifications need to be checked against the
+                    requirement.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Should I choose a sensor by interface first?</h3>
+                <p>
+                    Interface is a reasonable first filter when the microcontroller is fixed,
+                    because it determines whether the part can be used at all. Within the remaining
+                    options, accuracy, range and response time should drive the decision.
+                </p>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer class="site-footer">
+    <div class="wrap">
+        <p>Sensor Selection Guide &mdash; an educational resource built for a graduate course project.</p>
+        <p>Last updated: <time datetime="2026-11-13">13 November 2026</time></p>
+    </div>
+</footer>
+
+</body>
+</html>
